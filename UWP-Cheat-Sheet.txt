@@ -311,6 +311,158 @@ Hamburger: &#xE700;
 
 Use ListBox and ListBoxItems for the navigation inside of a SplitView.
 
+UWP-25 - Common XAML Controls - Part 2
+==========================================
 
+<TimePicker ClockIdentifier="12HourClock" />
 
+<CalendarDatePicker PlaceholderText="chose a date" />
+
+<CalendarView SelectionMode="Multiple"
+		SelectedDatesChanged="MyCalendarView_SelectedDatesChanged" />
+
+private void MyCalendarView_SelectedDatesChanged(CalendarView sender, CalendarViewSelectedDatesChanged)
+{
+	var selectedDates = sender.SelectedDates.Select(p => p.Date.Month.ToString() + "/" + p.Date.Day.ToString()).ToArray();
+	var values = string .Join(", ", selectedDates);
+	CalendarViewResultTextBlock.Text = values;
+}
+
+<Button Content="Flyout">
+	<Button.Flyout>
+		<Flyout x:Name="MyFlyout">
+		
+		</Flyout>
+	</Button.Flyout>
+</Button>
+
+MyFlyout.Hide();
+
+<Button Content="Flyout">
+	<Button.Flyout>
+		<MenuFlyout Placement="Bottom">
+			<MenuFlyoutItem Text="Item 1" />
+			<MenuFlyoutItem Text="Item 2" />
+			<MenuFlyoutSeparator />
+			<MenuFlyoutSubItem Text="Item 3" />
+				<MenuFlyoutItem Text="Item 4" />
+				<MenuFlyoutSubItem Text="Item 5" />
+					<MenuFlyoutItem Text="Item 6" />
+					<MenuFlyoutItem Text="Item 7" />
+				</MenuFlyoutSubItem >
+			</MenuFlyoutSubItem>
+			<MenuFlyoutSeparator />
+			<MenuFlyoutItem Text="Item 8" />
+		</MenuFlyout>
+	</Button.Flyout>
+</Button>
+<!-- You can apply this to anything ... ex. Image: -->
+<!-- https://msdn.microsoft.com/en-us/library/windows/apps/xaml/dn308516.aspx -->
+
+<AutoSuggestBox Name="MyAutoSuggestBox" QueryIcon="Find" PlaceholderText="Search" TextChanged="MyAutoSuggestBox_TextChanged" / >
+
+private string[] selectionItems = new string[] {"Ferdinand", "Frank", "Frida", "Nigal", "Tag", "Tanya", "Tanner", "Todd"};
+
+private void MyAutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+{
+	var autoSuggestBox = (AutoSuggestBox)sender;
+	var filtered = selectionItems.Where(p => p.StartsWith(autoSuggestBox.Text)).ToArray();
+	autoSuggestBox.ItemsSource = filtered;
+}
+
+<Slider Maximum="100" Minimum="0" />
+
+<ProgressBar Maximum="100" Value="{x:Bind MySlider.Value, Mode=OneWay}" />
+
+<ProgressRing IsActive="True"/>
+
+UWP-26 - Working with the ScrollViewer
+========================================
+
+<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+
+</ScrollViewer >
+
+You can put anything inside it, however, don't put it inside of a StackPanel!
+
+UWP-27 - Canvas and Shapes
+============================
+
+Canvas allows you to do absolute positioning via attached properties.
+
+<Line X1="10" X2="200" Y1="10" Y2="10" Stroke="Black" Fill="Black" StrokeThickness="5" StrokeEndLineCap="Triangle"/>
+
+<Polyline Canvas.Left="150" Canvas.Top="0" Stroke="Black" StrokeThickness="5" Fill="Red"
+                  Points="50,25 0,100 100,100 50,25" StrokeLineJoin="Round" StrokeStartLineCap="Round"/>
+				  
+<Rectangle />
+<Ellipse />
+
+Canvas.ZIndex="100"
+
+The higher the ZIndex, the higher in the stack it appears (covering what is below it).
+
+UWP-28 - XAML Styles
+===================================
+
+https://dev.windows.com/en-us/design
+
+<Page.Resources>
+	<SolidColorBrush x:Key="MyBrush" Color="Brown" />
+	<Style TargetType="Button" x:Key="MyButtonStyle">
+		<Setter Property="Background" Value="Blue"/>
+		<Setter Property="FontFamily" Value="Arial Black"/>
+		<Setter Property="FontSize" Value="36"/>
+	</Style>
+</Page.Resources>
+
+Binding: {StaticResource ResourceName}
+
+<Button Content="OK" Style="{StaticResource MyButtonStyle}" />
+
+Create Page or Application level resource dictionaries
+
+<Application.Resources>
+</Application.Resources>
+
+Split up your styles into Resource Dictionary files:
+
+<!-- Dictionary1.xaml -->
+<ResourceDictionary>
+	<SolidColorBrush x:Key="brush" Color="Red" />
+</ResourceDictionary>
+
+<Page>
+	<Page.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="Dictionary1.xaml" />
+				<ResourceDictionary Source="Dictionary2.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	<Page.Resources>
+	
+	<TextBlock Foreground="{StaticResource SomeStyle}" Text="Hi" />
+</Page>
+
+UWP-29 - XAML Themes
+=================================
+
+http://bit.do/theme-resources
+
+Put your mouse on a style, hit F12 to open generic.xaml
+
+<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+	<Rectangle Width="100" Height="100" Fill="{ThemeResource SystemAccentColor}"/>
+	<Rectangle Width="50" Height="50" Fill="{ThemeResource SystemColorWindowColor}"/>
+</Grid>
+
+<App RequestedTheme = "Light" >
+
+High Contrast themes override styles.
+
+Lots of different styles of system styles defined:
+<TextBlock Text="page name" Style="{StaticResource HeaderTextBlockStyle}" />
+
+Many styles defined in generic.xaml used BasedOn attribute ... and you can too!
 
