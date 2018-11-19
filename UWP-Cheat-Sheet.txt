@@ -1,0 +1,316 @@
+UWP Cheat Sheet
+***************
+
+UWP-04 - What is XAML?
+================================
+XAML - XML Syntax, create instances of Classes that
+define the UI.
+
+UWP-05 - Understanding Type Converters
+=======================================
+Type Converters - Convert literal strings in XAML
+into enumerations, instances of classes, etc.
+
+UWP-06 - Understanding default properties,
+Complex Properties and the
+Property Element Syntax
+===========================================
+
+Default Property ... Ex. sets Content property:
+<Button>Click Me</Button>
+
+Complex Properties - Break out a property into its
+own element syntax:
+
+		<Button Name="ClickMeButton"
+				HorizontalAlignment="Left"
+				Content="Click Me"
+				Margin="20,20,0,0"
+				VerticalAlignment="Top"
+				Click="ClickMeButton_Click"
+				Width="200"
+				Height="100"
+				>
+			<Button.Background>
+				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+					<GradientStop Color="Black" Offset="0">
+					<GradientStop Color="Red" Offset="1">
+				</LinearGradientBrush>
+			</Button.Background>
+		</Button>
+		
+UWP-07 - Understanding XAML Schemas
+and Namespace Declarations
+=====================================
+
+Don't touch the schema stuff - it's necessary!
+
+Schemas define rules for XAML, for UWP, for designer support, etc.
+
+Namespaces tell XAML parser where to find the definition /
+rules for a given element in the XAML.
+
+UWP-08 - XAML Layout with Grids
+===================================
+
+Layout controls don't have a content property ...
+they have a Children property of type UIElementCollection.
+By embedding any control inside a layout control,
+you are implicitly calling the Add method of the Children
+collection property.
+
+// Grid.Children.Add(MyButton);
+
+<Grid Background="Black">
+	<Grid.RowDefinitions>
+		<RowDefinition Height="*" />
+		<RowDefinition Height="*" />
+		<RowDefinition Height="*" />
+	</Grid.RowDefinitions>
+	<Grid.ColumnDefinitions>
+		<ColumnDefinition Width="*" />
+		<ColumnDefinition Width="*" />
+		<ColumnDefinition Width="*" />
+	</Grid.ColumnDefinitions>
+</Grid>
+
+Sizes expressed in terms of:
+
+Explicit pixels - 100
+
+Auto - use the largest value of elements it contains to define the width /
+
+* (Star Sizing) - Utililize all the available space
+
+1* - Of all available space, give me 1 "share"
+2* - Of all available space, give me 2 "shares"
+3* - Of all available space, give me 3 "shares"
+
+6 total shares ... 3* would be 50% of the available width / height.
+
+Elements put themselves into rows and columns using attachted property
+syntax:
+
+...
+	...
+	<Button Grid.Row="0" />
+</Grid>
+
+- When referencing Rows and Columns  ... 0 based.
+- There's always one default implicit cell: Row 0, Column 0
+- If not specified, element will be in the default cell
+
+<StackPanel>
+	<TextBlock>Top</TextBlock>
+	<TextBlock>Bottom</TextBlock>
+</StackPanel>
+
+- Vertical Orientation by default.
+- Left to right flow by default when in Horizontal orientation.
+- Most layouts will combine multiple layout controls.
+- Grid will overlap controls. StackPanel will stack them.
+
+UWP-12 - Laudable Layout Challange
+======================================
+
+1. Use only a Grid control.
+2. I used the designer for a 5" Phone 1920x1080 300% scale.
+3. The large textblock's size is 48 points.
+4. Most of the margins are either 10 or 20 pixels.
+5. The TextBlock for First Name, Last Name and Email should be centered vertically in the row.
+
+6. Tricky: You'll need to figure out how to allow your TextBlock to span multiple columns.
+(Hint: use Intellisense!)
+
+Use this image as your guide: UWP-011-Screenshot.png
+
+Remember: Try to solve this without my help!
+Also: Only watch enough of the solution video to get unstuck.
+
+If you do solve it without my help, you should watch the entire solution video to see the difference.
+
+UWP-14 - Legendary Layout Challange
+=======================================
+
+Use only StackPanel controls.
+I use the designer of a 13.3 Desktop (1280 x 720) 100% scale.
+The large textblock's size is 48 points.
+The left-most textblock is 250 pixels wide.
+The second textblock is 500 pixels wide.
+Get the text from LorumIpsum.txt file.
+The third area is 300 pixels wide.
+Most of the margins are either 10 or 20 pixels.
+You'll need to use TextWrapping property of TextBlocks.
+
+Use this image as a guide: UWP-013-Screenshot.png
+
+Remember: Try to solve this without my help!
+Also: Only watch enough of the solution video to get unstuck.
+
+If you do solve it without my help, you should watch the entire solution to see the difference.
+
+
+UWP-16 - Laborious Layout Challange
+=====================================
+
+1. Use both Grids and StackPanels.
+2. I use the designer of a 13.3 Desktop (1280 x 720) 100% Scale.
+3. The width of the entire layout should be 500 pixels.
+4. Again, get the text from the LorumIpsum.txt file.
+5. Most of the margins are either 10 or 20 pixels.
+6. The Title TextBlocks have a font size of 24 pixels.
+7. The rectangles should be 100 wide by 30 tall.
+8. The color of the rectagles below each titled section:
+-- Title 1: Green, Black, Red
+-- Title 2: Red, Black, Blue
+-- Title 3: Blue, Black, Yellow
+
+Use this image as your guide: UWP-015-Screenshot.png
+
+Remember: Try to solve this without my help!
+Also: Only watch enough of the solution video to get unstuck.
+
+If you do solve it without my help, you should watch the entire solution to see the difference.
+
+UWP-17 - XAML Layout with Relative Panel
+=========================================
+
+It basically defines an area within which you can position and align child objects
+-- in relation to eachother
+-- in relation to the parent panel.
+
+Controls used attached properties to position themselves.
+
+Panel alignment relationships (AlignTopWithPanel, AlignLeftWithPanel, ...) are applied first.
+Sibling alignment relationships (AlignTopWith, AlignLeftOf, ...) are applied second.
+Sibling postional relationships (Above, Below, LeftOf, RightOf) are applied last.
+
+<RelativePanel MinHeight="300" Grid.Row="1">
+	<Rectangle Name="RedRectangle" RelativePanel.AlignRightWithPanel="True"/>
+	<Rectangle RelativePanel.LeftOf="RedRectangle"/>
+</RelativePanel>
+
+UWP-18 - XAML Layout with SplitView
+=====================================
+
+The split view allows us to create a panel that can be displayed or hidden.
+
+We would use the SplitView to implement hamburger navigation.
+
+There are two parts to a SplitView:
+1) The part that is hidden by default (Pane)
+2) The part that is shown by default (Content)
+
+<SplitView Name="MySplitView"
+	CompactPaneLenth="50"
+	IsPaneOpen="False"
+	DisplayMode="CompactInline"
+	OpenPaneLength="200" >
+	<SplitView.Pane>
+	
+	</SplitView.Pane>
+	<SplitView.Content>
+	
+	</SplitView.Content>
+</SplitView>
+
+Inline - Panel completely covers content.  When expanded, panel pushes content.
+CompactInline - Pane covers most of the content.  When expanded, panel pushes content.
+Overlay - Panel completely covers content. When expanded, panel covers content.
+CompactOverlay - Panel covers most of the content.  When expanded, panel covers content.
+
+Open/Close Pane in C#
+MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
+
+UWP-19 - Working with Navigation
+==================================
+
+App > Window > Frame > MainPage
+
+You can load pages into a child frame or into a root frame:
+
+Frame.Navigate(typeof(Page2), additionalParameter);
+
+You can retrieve additionalParameter on the page you navigated to:
+
+	protected override void OnNavigatedTo(NavigationEventArgs e)
+	{
+		value = (string)e.Parameter;
+	}
+	
+Traverse back stack (history):
+if(Frame.CanGoBack) {
+	Frame.GoBack();
+}
+
+if(Frame.CanGoForward) {
+	Frame.GoForward();
+}
+
+Create a global variable by declaring a static internal field in the App class definition.
+
+UWP-20 - Common XAML Controls - Part 1
+========================================
+
+<CheckBox Name="MyCheckBox" Content="Agree?" Tapped="MyCheckBox_Tapped" />
+
+CheckBoxResultTextBox.Text = MyCheckBox.IsChecked.ToString();
+
+<RadioButton Name="YesRadioButton" Content="Yes" GroupName="MyGroup" checked="RadioButton_Checked" />
+<RadioButton Name="NoRadioButton" Content="No" GroupName="MyGroup" checked="RadioButton_Checked" />
+
+RadioButtonTextBlock.Text = (bool)YesRadioButton.IsChecked ? "Yes" : "No";
+
+<ComboBox SelectionChanged = "ComboBox_SelectionChanged" >
+	<ComboBoxItem Content="Fourth"/>
+	<ComboBoxItem Content="Fifth"/>
+	<ComboBoxItem Content="Sixth" IsSelected="True"/>
+</ComboBox>
+
+if(ComboBoxResultTextBlock == null) return;
+var combo = (ComboBox)sender;
+var item = (ComboBoxItem)combo.SelectedItem;
+ComboBoxResultTextBlock.Text = item.Content.ToString();
+
+<ListBox Name="MyListBox" SelectionMode="Multiple" SelectionChanged="ListBox_SelectionChanged">
+	<ListBoxItem Content="First"/>
+	<ListBoxItem Content="Second"/>
+	<ListBoxItem Content="Third"/>
+</ListBox>
+
+var selectedItems = MyListBox.Items.Cast<ListBoxItem>()
+						.Where(p => p.IsSelected)
+						.Select(t => t.Content.ToString())
+						.ToArray();
+						
+ListBoxResultTextBlock.Text = string.Join(", ", selectedItems);
+
+<Image Source="Assets/logo.png" Stretch="UniformToFill"/>
+
+<ToggleButton Name="MyToggleButton" Content="Premium Option" IsThreeState="True" Click="MyToggleButton_Click"/>
+
+ToggleButtonResultTextBlock.Text = MyToggleButton.IsChecked.ToString();
+
+<ToggleSwitch>
+	<ToggleSwitch.OffContent>
+		<TextBlock Text="I'm off right now."/>
+	</ToggleSwitch.OffContent>
+	<ToggleSwitch.OnContent>
+		<TextBlock Text="I'm on!"/>
+	</ToggleSwitch.OnContent>
+</ToggleSwitch>
+
+UWP-21 - Implementing a Simple Hamburger Navigation Menu
+==========================================================
+
+Jerry Nixon's Example: http://bit.do/hamburger-nav
+
+Use Character Map to find the code to display icons using Segoe MDL2 Assets.
+
+Hamburger: &#xE700;
+
+Use ListBox and ListBoxItems for the navigation inside of a SplitView.
+
+
+
+
